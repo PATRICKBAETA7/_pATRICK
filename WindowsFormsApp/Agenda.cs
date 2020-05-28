@@ -19,6 +19,7 @@ namespace WindowsFormsApp {
         }
 
         private void MinhaJanela_Load(object sender, EventArgs e) {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             LimparCampos();
@@ -61,22 +62,19 @@ namespace WindowsFormsApp {
         private void btSalvar_Click(object sender, EventArgs e) {
             if (ValidarCampos()) {
 
-                // metodo ArmazenarFuncionario
-                // responsavel por inserir um novo objeto Funcionario
-                // em uma posição da list
+                
                 listaPessoas.ArmazenarPessoa(tbNome.Text, 
                                             tbEmail.Text,
                                             tbEndereco.Text,
                                             tbTelefone.Text);
 
-                // alimento uma "sublista" de item (que é uma linha da list view)
-                // "pegando" os dados  dos textbox 
+                
                 ListViewItem item = new ListViewItem(new[] { tbNome.Text,
                                                              tbEndereco.Text,
                                                             tbTelefone.Text,
                                                             tbEmail.Text});
 
-                // adicionando o objeto item na listview
+                
                 lvAgenda.Items.Add(item);
 
                 MessageBox.Show($"O contato {tbNome.Text} foi salvo");
@@ -91,8 +89,7 @@ namespace WindowsFormsApp {
 
         private void btDeletar_Click(object sender, EventArgs e) {
             for (int itemList = lvAgenda.SelectedItems.Count - 1; itemList >= 0; itemList--) {
-                // cria um objeto tipo list view item
-                // joga pra esse objeto, a lista de funcionarios selecionados
+                
                 ListViewItem lista = lvAgenda.SelectedItems[itemList];
                 // metodo remove = remove uma lista (item) da list view
                 lvAgenda.Items.Remove(lista);
@@ -101,20 +98,20 @@ namespace WindowsFormsApp {
                 // que é a coluna "nome"
                 string nome = lista.SubItems[0].Text;
 
-                // chamada ao metodo RemoverFuncionario
+                
                 // passando o parametro nome, obtido acima.
-                listaPessoas.RemoverFuncionario(nome);
+                listaPessoas.RemoverPessoa(nome);
             }
         }
 
         private bool ValidarCampos() {
             if (tbNome.Text == "") {
-                MessageBox.Show("Nome Inválido", "Atenção");
+                MessageBox.Show("Nome Inválido");
                 return false;
             }
 
             if (tbTelefone.Text == "" || tbTelefone.Text == "0") {
-                MessageBox.Show("Salário Inválido", "Atenção");
+                MessageBox.Show("Telefone Inválido");
                 return false;
             }
 

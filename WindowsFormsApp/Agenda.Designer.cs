@@ -205,6 +205,9 @@
             this.Controls.Add(this.lbTelefone);
             this.Controls.Add(this.lbEndereco);
             this.Controls.Add(this.lbNome);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Agenda";
             this.Text = "Agenda";
             this.Load += new System.EventHandler(this.Agenda_Load);

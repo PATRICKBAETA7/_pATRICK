@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CadastroFuncionario));
             this.labelNome = new System.Windows.Forms.Label();
             this.labelSalario = new System.Windows.Forms.Label();
             this.labelDesc = new System.Windows.Forms.Label();
@@ -318,6 +319,9 @@
             this.Controls.Add(this.labelSalario);
             this.Controls.Add(this.labelNome);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CadastroFuncionario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cadastro de Funcionário";
