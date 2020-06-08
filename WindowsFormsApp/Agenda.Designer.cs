@@ -41,6 +41,7 @@
             this.Endereo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Telefone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Email = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.agendaTableAdapter1 = new WindowsFormsApp.agendaAppDataSetTableAdapters.AgendaTableAdapter();
             this.SuspendLayout();
             // 
             // lbNome
@@ -187,6 +188,10 @@
             this.Email.Text = "E-mail";
             this.Email.Width = 451;
             // 
+            // agendaTableAdapter1
+            // 
+            this.agendaTableAdapter1.ClearBeforeFill = true;
+            // 
             // Agenda
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,5 +240,6 @@
         private System.Windows.Forms.ColumnHeader Endereo;
         private System.Windows.Forms.ColumnHeader Telefone;
         private System.Windows.Forms.ColumnHeader Email;
+        private agendaAppDataSetTableAdapters.AgendaTableAdapter agendaTableAdapter1;
     }
 }

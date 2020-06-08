@@ -25,7 +25,9 @@ namespace WindowsFormsApp {
             LimparCampos();
         }
 
-        
+        private void LvAgenda_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
 
         private void Agenda_Load(object sender, EventArgs e) {
 
@@ -62,22 +64,33 @@ namespace WindowsFormsApp {
         private void btSalvar_Click(object sender, EventArgs e) {
             if (ValidarCampos()) {
 
-                
-                listaPessoas.ArmazenarPessoa(tbNome.Text, 
-                                            tbEmail.Text,
+                listaPessoas.ArmazenarPessoa(tbNome.Text,
                                             tbEndereco.Text,
-                                            tbTelefone.Text);
-
+                                            tbTelefone.Text,
+                                            tbEmail.Text
+                                            );
+                int index = listaPessoas.BuscarPessoa(tbNome.Text);
+                var pessoaObj = listaPessoas.RetornaObjetoPessoa(index);
                 
-                ListViewItem item = new ListViewItem(new[] { tbNome.Text,
-                                                             tbEndereco.Text,
-                                                            tbTelefone.Text,
-                                                            tbEmail.Text});
+                ListViewItem item = new ListViewItem(new[] { pessoaObj.nome,
+                                                             pessoaObj.endereco,
+                                                             pessoaObj.telefone,
+                                                             pessoaObj.email
+                                                             });
 
                 
                 lvAgenda.Items.Add(item);
 
                 MessageBox.Show($"O contato {tbNome.Text} foi salvo");
+                LimparCampos();
+
+                //Banco de Dados
+                //Insert
+               
+                agendaTableAdapter1.Insert(pessoaObj.nome,
+                                            pessoaObj.endereco,
+                                            pessoaObj.telefone,
+                                            pessoaObj.email);
                 
             }
         }
@@ -118,8 +131,39 @@ namespace WindowsFormsApp {
             return true;
         }
 
-        private void LvAgenda_SelectedIndexChanged(object sender, EventArgs e) {
+        private void Ordenar() {
+            
+            if (Convert.ToBoolean(Nome)) {
+                // metodo que ordena a lista de objetos funcionarios
+                listaPessoas.OrdenarPessoa();
 
-        }
+                //limpa a listview (grid da tela)
+                lvAgenda.Items.Clear();
+
+                // obtem o tamanho da list
+                // lembrando que aqui neste escopo, o listaFuncionario não é manipulado como list
+                // apenas dentro da classe
+                int tamanhoLista = listaPessoas.RetornarTamanhoLista();
+
+                // objeto funcionarioObj "em branco"
+                Pessoa PessoaObj = new Pessoa();
+
+                //percorre a list do inicio ao fim
+                for (int indice = 0; indice < tamanhoLista; indice++) {
+                    // cada indice, funcionarioObj irá receber o objeto Funcionario da posição
+                    PessoaObj = listaPessoas.RetornaObjetoPessoa(indice);
+
+                    // alimento uma "sublista" de item (que é uma linha da list view)
+                    // "pegando" os dados direto do funcionarioObj
+                    ListViewItem item = new ListViewItem(new[] { PessoaObj.nome,
+                                                             PessoaObj.endereco,
+                                                             PessoaObj.telefone,
+                                                             PessoaObj.email,
+                                                             });
+                    // adicionando o objeto item na listview
+                    lvAgenda.Items.Add(item);
+                }
+            }
+        }   
     }
 }

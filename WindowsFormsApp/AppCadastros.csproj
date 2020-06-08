@@ -52,7 +52,17 @@
     <Compile Include="Agenda.Designer.cs">
       <DependentUpon>Agenda.cs</DependentUpon>
     </Compile>
+    <Compile Include="agendaAppDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>agendaAppDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="AgendaLista.cs" />
+    <Compile Include="DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Gerente.cs" />
     <Compile Include="ListaFuncionario.cs" />
     <Compile Include="Pessoa.cs" />
@@ -90,6 +100,28 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="agendaAppDataSet.xsc">
+      <DependentUpon>agendaAppDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="agendaAppDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>agendaAppDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="agendaAppDataSet.xss">
+      <DependentUpon>agendaAppDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -215,6 +215,7 @@ namespace WindowsFormsApp
 
         private void BtnOrdenar_Click(object sender, EventArgs e)
         {
+            
             // metodo que ordena a lista de objetos funcionarios
             listaFuncionarios.OrdenarFuncionario();
 
