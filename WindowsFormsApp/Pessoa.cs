@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace WindowsFormsApp {
     public class Pessoa {
 
-        public string nome, email, endereco, telefone;
+        public string nome, endereco, telefone,email;
         
 
         //Sobrecargas
 
         // Construtor com parametros
-        public Pessoa(string nomeParam, string emailParam, string enderecoParam, string telefoneParam) {
+        public Pessoa(string nomeParam, string enderecoParam, string telefoneParam, string emailParam) {
             this.nome = nomeParam;
-            this.email = emailParam;
-            this.endereco= enderecoParam;
+            this.endereco = enderecoParam;
             this.telefone = telefoneParam;
+            this.email = emailParam;
         }
 
         // Construtor vazio
