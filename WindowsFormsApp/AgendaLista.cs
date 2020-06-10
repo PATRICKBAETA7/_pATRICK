@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace WindowsFormsApp {
     public class AgendaLista {
 
-        
-            
+
+            public bool OrdemLista;
+
             List<Pessoa> Pessoas = new List<Pessoa>();
 
             
@@ -22,9 +23,9 @@ namespace WindowsFormsApp {
 
             }
 
-            public void RemoverPessoa(String nome) {
-                
-                Pessoas.RemoveAll(f => f.nome == nome); 
+            public void RemoverPessoa(int index) {
+
+                Pessoas.RemoveAt(index);
             }
 
             public int BuscarPessoa(String nome) {
@@ -33,8 +34,17 @@ namespace WindowsFormsApp {
             }
 
             public void OrdenarPessoa() {
-                
-                Pessoas = Pessoas.OrderBy(f => f.nome).ToList();
+
+                if (!OrdemLista) {
+                    Pessoas = Pessoas.OrderBy(item => item.nome).ToList();
+                    OrdemLista = true;
+
+                } else {
+
+                    Pessoas = Pessoas.OrderByDescending(item => item.nome).ToList();
+                    OrdemLista = false;
+
+                }
             }
 
             
@@ -44,12 +54,21 @@ namespace WindowsFormsApp {
 
             
             public Pessoa RetornaObjetoPessoa(int index) {
-                
-                var pessoaObj = Pessoas[index];  
-                return pessoaObj;
+
+                return Pessoas[index];  
+                 
+            }
+
+            public void Editar(Pessoa pessoa, int index) {
+
+                Pessoas[index].nome = pessoa.nome;
+                Pessoas[index].endereco = pessoa.endereco;
+                Pessoas[index].telefone = pessoa.telefone;
+                Pessoas[index].email = pessoa.email; 
             }
 
 
-        
+
+
     }
 }

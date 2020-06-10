@@ -18,19 +18,29 @@ namespace WindowsFormsApp {
             InitializeComponent();
         }
 
-        private void MinhaJanela_Load(object sender, EventArgs e) {
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            LimparCampos();
-        }
-
-        private void LvAgenda_SelectedIndexChanged(object sender, EventArgs e) {
-
-        }
+        
 
         private void Agenda_Load(object sender, EventArgs e) {
 
+            List<Pessoa> pessoasRegistros = ManipulaAgenda.Manipulacao.selecionarRegistros();
+
+            for (int contador = 0; contador < pessoasRegistros.Count; contador++) {
+
+                ListViewItem item = new ListViewItem(new[] { pessoasRegistros[contador].nome,
+                                                             pessoasRegistros[contador].endereco,
+                                                             pessoasRegistros[contador].telefone,
+                                                             pessoasRegistros[contador].email
+                                                             });
+
+
+                lvAgenda.Items.Add(item);
+
+                listaPessoas.ArmazenarPessoa(pessoasRegistros[contador].nome,
+                                             pessoasRegistros[contador].endereco,
+                                             pessoasRegistros[contador].telefone,
+                                             pessoasRegistros[contador].email);
+
+            }
         }
 
         private void tbNome_Leave(object sender, EventArgs e) {
@@ -62,108 +72,97 @@ namespace WindowsFormsApp {
         }
 
         private void btSalvar_Click(object sender, EventArgs e) {
-            if (ValidarCampos()) {
+            if (lvAgenda.SelectedItems.Count > 0) {
 
-                listaPessoas.ArmazenarPessoa(tbNome.Text,
-                                            tbEndereco.Text,
-                                            tbTelefone.Text,
-                                            tbEmail.Text
-                                            );
-                int index = listaPessoas.BuscarPessoa(tbNome.Text);
-                var pessoaObj = listaPessoas.RetornaObjetoPessoa(index);
-                
-                ListViewItem item = new ListViewItem(new[] { pessoaObj.nome,
-                                                             pessoaObj.endereco,
-                                                             pessoaObj.telefone,
-                                                             pessoaObj.email
+                var pessoa = new Pessoa(tbNome.Text,
+                                        tbEndereco.Text,
+                                        tbTelefone.Text,
+                                        tbEmail.Text);
+
+                ListViewItem item = lvAgenda.SelectedItems[0];
+                int index = lvAgenda.Items.IndexOf(lvAgenda.SelectedItems[0]); ;
+                listaPessoas.Editar(pessoa, index);
+
+                string nomeOriginal = lvAgenda.SelectedItems[0].SubItems[0].Text;
+                lvAgenda.SelectedItems[0].SubItems[0].Text = pessoa.nome;
+                lvAgenda.SelectedItems[0].SubItems[1].Text = pessoa.endereco;
+                lvAgenda.SelectedItems[0].SubItems[2].Text = pessoa.telefone;
+                lvAgenda.SelectedItems[0].SubItems[3].Text = pessoa.email;
+
+                ManipulaAgenda.Manipulacao.AtualizarRegistro(pessoa.nome, pessoa.endereco,pessoa.telefone,pessoa.email,nomeOriginal);
+
+            } else {
+
+                ListViewItem item = new ListViewItem(new[] { tbNome.Text,
+                                                            tbEndereco.Text,
+                                                            tbTelefone.Text,
+                                                            tbEmail.Text
                                                              });
 
-                
+
                 lvAgenda.Items.Add(item);
 
-                MessageBox.Show($"O contato {tbNome.Text} foi salvo");
-                LimparCampos();
+                listaPessoas.ArmazenarPessoa(tbNome.Text, tbEndereco.Text, tbTelefone.Text,tbEmail.Text);
 
-                //Banco de Dados
-                //Insert
-               
-                agendaTableAdapter1.Insert(pessoaObj.nome,
-                                            pessoaObj.endereco,
-                                            pessoaObj.telefone,
-                                            pessoaObj.email);
-                
+                ManipulaAgenda.Manipulacao.InserirRegistro(tbNome.Text,
+                                                            tbEndereco.Text,
+                                                            tbTelefone.Text,
+                                                            tbEmail.Text);
+
             }
         }
 
         private void btEditar_Click(object sender, EventArgs e) {
 
+            if (lvAgenda.SelectedItems.Count > 0) {
+                ListViewItem item = lvAgenda.SelectedItems[0];
+                tbNome.Text = item.SubItems[0].Text;
+                tbEndereco.Text = item.SubItems[1].Text;
+                tbTelefone.Text = item.SubItems[2].Text;
+                tbEmail.Text = item.SubItems[3].Text;
+            }
 
         }
 
         private void btDeletar_Click(object sender, EventArgs e) {
             for (int itemList = lvAgenda.SelectedItems.Count - 1; itemList >= 0; itemList--) {
                 
-                ListViewItem lista = lvAgenda.SelectedItems[itemList];
-                // metodo remove = remove uma lista (item) da list view
-                lvAgenda.Items.Remove(lista);
+                ListViewItem item = lvAgenda.SelectedItems[0];
+                int index = lvAgenda.Items.IndexOf(item);
 
-                // obtem o text da posição 0 da minha sublista da listview
-                // que é a coluna "nome"
-                string nome = lista.SubItems[0].Text;
+                string nomeOriginal = lvAgenda.SelectedItems[0].SubItems[0].Text;
 
-                
-                // passando o parametro nome, obtido acima.
-                listaPessoas.RemoverPessoa(nome);
+                lvAgenda.SelectedItems[0].SubItems.Clear();
+                listaPessoas.RemoverPessoa(index);
+
+                lvAgenda.SelectedItems[0].Selected = false;
+
+                ManipulaAgenda.Manipulacao.ExcluirRegistro(nomeOriginal);
             }
         }
 
-        private bool ValidarCampos() {
-            if (tbNome.Text == "") {
-                MessageBox.Show("Nome Inválido");
-                return false;
+        
+
+        private void lvAgenda_ColumnClick(object sender, ColumnClickEventArgs e) {
+
+            int coluna = e.Column;
+
+            if (coluna == 0) {
+                    listaPessoas.OrdenarPessoa();
+                    lvAgenda.Items.Clear();
+                    int tamanhoList = listaPessoas.RetornarTamanhoLista();
+
+                    for (int indice = 0; indice < tamanhoList; indice++) {
+                        var pessoa = listaPessoas.RetornaObjetoPessoa(indice);
+                        ListViewItem item = new ListViewItem(new[] { pessoa.nome,
+                                                                 pessoa.endereco,
+                                                                 pessoa.telefone,
+                                                                 pessoa.email });
+                        lvAgenda.Items.Add(item);
+                    }
             }
-
-            if (tbTelefone.Text == "" || tbTelefone.Text == "0") {
-                MessageBox.Show("Telefone Inválido");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void Ordenar() {
             
-            if (Convert.ToBoolean(Nome)) {
-                // metodo que ordena a lista de objetos funcionarios
-                listaPessoas.OrdenarPessoa();
 
-                //limpa a listview (grid da tela)
-                lvAgenda.Items.Clear();
-
-                // obtem o tamanho da list
-                // lembrando que aqui neste escopo, o listaFuncionario não é manipulado como list
-                // apenas dentro da classe
-                int tamanhoLista = listaPessoas.RetornarTamanhoLista();
-
-                // objeto funcionarioObj "em branco"
-                Pessoa PessoaObj = new Pessoa();
-
-                //percorre a list do inicio ao fim
-                for (int indice = 0; indice < tamanhoLista; indice++) {
-                    // cada indice, funcionarioObj irá receber o objeto Funcionario da posição
-                    PessoaObj = listaPessoas.RetornaObjetoPessoa(indice);
-
-                    // alimento uma "sublista" de item (que é uma linha da list view)
-                    // "pegando" os dados direto do funcionarioObj
-                    ListViewItem item = new ListViewItem(new[] { PessoaObj.nome,
-                                                             PessoaObj.endereco,
-                                                             PessoaObj.telefone,
-                                                             PessoaObj.email,
-                                                             });
-                    // adicionando o objeto item na listview
-                    lvAgenda.Items.Add(item);
-                }
-            }
-        }   
+        }
     }
 }
